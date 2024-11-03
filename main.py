@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 import curses
-import sys
 import curses.ascii
+import sys
 
+commands = ['w', 'q', 'write', 'quit', 'writequit', 'x', 'clear', 'name', 'filename', 'n']
 
-class SimpleEditor:
+class Liv:
+    global commands
+
     def __init__(self, stdscr, filename=None):
+        global commands
         self.stdscr = stdscr
         self.filename = filename
         self.buffer = []
@@ -16,7 +20,7 @@ class SimpleEditor:
         self.command_buffer = ''
         self.message = ''
         self.message_is_error = False  # New flag to track error messages
-        self.commands = ['write', 'quit', 'write+quit', 'wq', 'x', 'clear']  # Available commands
+        self.commands = commands  # Available commands
         self.current_suggestion = ''
         self.init_colors()
 
@@ -64,7 +68,7 @@ class SimpleEditor:
 
     def save_file(self):
         if not self.filename:
-            self.set_message("No filename specified", is_error=True)
+            self.set_message("No filename specified, choose one with the 'name' command", is_error=True)
             return False
 
         try:
@@ -161,7 +165,7 @@ class SimpleEditor:
         elif cmd in ('w', 'write'):
             self.save_file()
             self.command_mode = False
-        elif cmd in ('write+quit', 'wq', 'x'):
+        elif cmd in ('writequit', 'wq', 'x'):
             if self.save_file():
                 sys.exit(0)
             # If save failed, we'll stay in the editor with the error message
@@ -249,6 +253,7 @@ class SimpleEditor:
 
 
 def main(stdscr):
+
     # Set up terminal
     curses.raw()
     stdscr.keypad(True)
@@ -257,8 +262,8 @@ def main(stdscr):
     filename = sys.argv[1] if len(sys.argv) > 1 else None
 
     # Create and run editor
-    editor = SimpleEditor(stdscr, filename)
-    editor.run()
+    liv = Liv(stdscr, filename)
+    liv.run()
 
 
 if __name__ == '__main__':
