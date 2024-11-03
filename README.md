@@ -10,7 +10,7 @@ Liv is a simple text and code editor for Linux, built in Python.
 ### 🌸 Notice
 Liv is a work in progress. Features that aren't yet implemented are denoted by "COMING SOON."
 
-# 🌸 Compatibility
+### 🌸 Compatibility
 Liv is currently only available on Linux. It has been tested on the following distributions:
 - Ubuntu
 
