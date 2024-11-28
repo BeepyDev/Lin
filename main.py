@@ -12,7 +12,8 @@ class Liv:
         self.command_buffer = ''
         self.message = ''
         self.message_is_error = False
-        self.commands = ['w', 'q', 'write', 'quit', 'writequit', 'x', 'clear', 'name', 'filename', 'n']
+        self.commands = ['write', 'quit', 'writequit', 'clear', 'name']
+        self.aliases = ['w', 'q', 'save', 's', 'wq', 'sq', 'savequit', 'x', 'filename', 'n']
         self._init_colors()
 
     @staticmethod
@@ -130,7 +131,10 @@ class Liv:
             'quit': sys.exit,
             'w': lambda: self._save_file() and None,
             'write': lambda: self._save_file() and None,
+            'save': lambda: self._save_file() and None, #ALIAS
             'writequit': lambda: self._save_file() and sys.exit(0),
+            'savequit': lambda: self._save_file() and sys.exit(0),
+            'sq': lambda: self._save_file() and sys.exit(0),
             'wq': lambda: self._save_file() and sys.exit(0),
             'x': lambda: self._save_file() and sys.exit(0),
             'clear': lambda: self._clear_buffer(),
@@ -176,7 +180,7 @@ class Liv:
         except curses.error: pass
 
         # Draw status line
-        status = f" {self.filename or '[No Name]'} - {self.message or ''}"
+        status = f" {self.filename or 'new file'} - {self.message or 'editing'} ."
         try:
             self.stdscr.attron(curses.color_pair(4 if self.message_is_error else 1))
             self.stdscr.addstr(height - 3 if self.command_mode else height - 2, 0, status.ljust(width))
